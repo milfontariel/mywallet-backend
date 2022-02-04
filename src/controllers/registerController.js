@@ -1,0 +1,24 @@
+import db from '../db.js';
+import bcrypt from 'bcrypt';
+
+export async function registerUser(req, res) {
+    try {
+        const newUser = req.body;
+
+        const user = await db.collection('users').findOne({ email: newUser.email });
+        if (user) {
+            res.sendStatus(409);
+        } else {
+            delete newUser.repeatPassword;
+            const passwordHash = bcrypt.hashSync(newUser.password, 10);
+            await db.collection('users').insertOne({
+                ...newUser,
+                password: passwordHash
+            });
+            res.sendStatus(201);
+        }
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
