@@ -3,5 +3,5 @@ import validateLoginSchemaMiddleware from "../middlewares/validateLoginSchemaMid
 import { login } from "../controllers/loginController.js";
 
 const loginRouter = Router();
-loginRouter.get('/', validateLoginSchemaMiddleware, login);
+loginRouter.post('/', validateLoginSchemaMiddleware, login);
 export default loginRouter;
