@@ -7,7 +7,7 @@ export async function registerUser(req, res) {
 
         const user = await db.collection('users').findOne({ email: newUser.email });
         if (user) {
-            res.sendStatus(409);
+            res.status(409).send("Usuário já cadastrado");
         } else {
             delete newUser.repeatPassword;
             const passwordHash = bcrypt.hashSync(newUser.password, 10);
@@ -15,10 +15,9 @@ export async function registerUser(req, res) {
                 ...newUser,
                 password: passwordHash
             });
-            res.sendStatus(201);
+            res.status(201).send("Conta criada");
         }
     } catch (error) {
-        console.log(error);
-        res.sendStatus(500);
+        res.status(500).send(error);
     }
 }
